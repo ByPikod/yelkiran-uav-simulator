@@ -4,4 +4,4 @@ Simple simulator that produces camera view for Raspberry Pi to process image and
 ![image](https://user-images.githubusercontent.com/46069238/226089776-a739f0f6-7228-470c-924e-a93435a50fc7.png)
 
 # UnityCam
-Plane's cam being transferring into a VirtualCam by the UnityCam.
+Plane's cam being transferring into a VirtualCam by the UnityCam. You have to register UnityCam's dll in order to get an camera output. You can found the register.bat in the folder named unitycam inside release build.
