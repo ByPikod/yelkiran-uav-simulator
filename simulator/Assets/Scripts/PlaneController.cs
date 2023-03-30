@@ -59,8 +59,8 @@ public class PlaneController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (transform.position.z > 1000)
-            transform.position = new Vector3(transform.position.x, transform.position.y, -1000);
+        if (transform.position.z > 300)
+            transform.position = new Vector3(transform.position.x, transform.position.y, -300);
         rb.AddForce(Vector3.forward * (enginePower * 140));
         speedTextToUpdate.text = String.Format("{0}\nkm/h", Math.Floor(rb.velocity.magnitude));
     }
