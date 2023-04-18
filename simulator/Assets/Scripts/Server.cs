@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using UnityEngine.UI;
 using TMPro;
 
 public class ServerHolder
@@ -15,6 +16,7 @@ public class ServerHolder
     private int port;
     private TcpClient pythonClient;
 
+    public bool failed = false;
     public bool listening = false;
     public bool connected = false;
     public bool dropBall = false;
@@ -40,6 +42,7 @@ public class ServerHolder
         } catch(System.Exception e)
         {
             Debug.Log("Failed to start listening: " + e.Message);
+            this.failed = true;
             return;
         }
 
@@ -112,9 +115,17 @@ public class Server : MonoBehaviour
     [SerializeField]
     public GameObject plane;
     [SerializeField]
-    public GameObject mainMenu;
+    public GameObject secondCamera;
+    
     [SerializeField]
     public TextMeshProUGUI statusText;
+    [SerializeField]
+    public Image statusColor;
+
+    [SerializeField]
+    public Color warnColor;
+    [SerializeField]
+    public Color successColor;
 
     bool serverStatus = false;
     
@@ -127,24 +138,38 @@ public class Server : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (serverHolder.listening)
+
+        if (serverHolder.failed)
         {
-            statusText.text = "Waiting for client...";
+            statusText.text = "Failed to host simulator server. Please make sure the port 5710 is free.";
+            statusText.color = this.warnColor;
         }
 
         // Hide menu if connection established with python image processor.
         if ( serverStatus != serverHolder.connected )
         {
-            serverStatus = serverHolder.connected;
-            mainMenu.SetActive(!serverStatus);
-            plane.SetActive(serverStatus);
+            
+            this.serverStatus = serverHolder.connected;
+            secondCamera.SetActive(!serverStatus);
+            plane.SetActive(this.serverStatus);
+            
+            if(serverStatus)
+            {
+                this.statusText.text = "Connection established!";
+                this.statusColor.color = this.successColor;
+            }
+            else
+            {
+                this.statusText.text = "Waiting for client...";
+                this.statusColor.color = this.warnColor;
+            }
+
         }
 
-        if (serverHolder.dropBall)
+        if (this.serverHolder.dropBall)
         {
-            serverHolder.dropBall = false;
-            plane.GetComponent<PlaneController>().DropTheBall();
+            this.serverHolder.dropBall = false;
+            this.plane.GetComponent<PlaneController>().DropTheBall();
         }
 
     }
